@@ -1,0 +1,16 @@
+com\example\dashboard\controller\MainController.class
+com\example\dashboard\service\LogReader.class
+com\example\dashboard\model\AlertEntry$Severity.class
+com\example\dashboard\tools\IntegrationCheckMain.class
+com\example\dashboard\tools\TestRunner.class
+com\example\dashboard\model\Report.class
+com\example\dashboard\model\AlertEntry.class
+com\example\dashboard\service\LogAnalyzer.class
+com\example\dashboard\tools\LogClientMain.class
+com\example\dashboard\MainApp.class
+com\example\dashboard\tools\UiSimulator.class
+com\example\dashboard\ui\MaliciousReportController.class
+com\example\dashboard\service\LogAnalyzer$AnalysisResult.class
+com\example\dashboard\service\ParsedLogEntry.class
+com\example\dashboard\tools\AnalyzerMain.class
+com\example\dashboard\model\LogEntry.class

@@ -1,0 +1,7 @@
+2025-12-18T09:55:00|user-monitor|INFO|user:mallory|ip:203.0.113.10|action:POST_COMMENT|status:OK|content:hello
+2025-12-18T09:55:03|user-monitor|INFO|user:mallory|ip:203.0.113.10|action:POST_COMMENT|status:OK|content:test
+2025-12-18T09:55:05|user-monitor|INFO|user:mallory|ip:203.0.113.10|action:POST_COMMENT|status:OK|content:spam1
+2025-12-18T09:55:07|user-monitor|INFO|user:mallory|ip:203.0.113.10|action:POST_COMMENT|status:OK|content:spam2
+2025-12-18T09:55:09|user-monitor|INFO|user:mallory|ip:203.0.113.10|action:POST_COMMENT|status:OK|content:spam3
+2025-12-18T10:07:00|user-monitor|INFO|user:alice|ip:192.168.1.10|action:DOWNLOAD|status:OK|file:report.pdf
+2025-12-18T10:08:00|user-monitor|INFO|user:alice|ip:192.168.1.10|action:DOWNLOAD|status:OK|file:report2.pdf
