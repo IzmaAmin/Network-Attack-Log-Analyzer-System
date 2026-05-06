@@ -1,130 +1,172 @@
-🛡️ Network Attack Log Analyzer System
-📌 Overview
+🧩 Integration Patch & Module Documentation
+📌 Patch Overview
 
-The Network Attack Log Analyzer System is a cybersecurity-focused log analysis tool designed to detect suspicious activities and potential network attacks by analyzing system log files.
+This repository includes a small integration patch for the DS Lab Dashboard project.
+The patch extends the dashboard with a malicious activity monitoring and alert visualization module without modifying existing core functionality.
 
-It simulates real-world Security Information and Event Management (SIEM) concepts by processing logs, identifying abnormal patterns, and generating structured security alerts.
+It is designed to be non-invasive, modular, and easily pluggable into an existing JavaFX dashboard system.
 
-This project demonstrates practical skills in:
+⚙️ What the Patch Contains
+MaliciousReportController.java
+→ UI controller for displaying security alerts and detailed logs
+malicious_report.fxml
+→ JavaFX view containing:
+ListView (alerts list)
+TextArea (alert details)
+🔗 Integration Instructions
+1️⃣ Copy Backend Monitoring Classes
 
-Log analysis
-Threat detection logic
-Cybersecurity monitoring concepts
-🎯 Key Objectives
-Analyze system/network log files
-Detect malicious or suspicious patterns
-Identify potential attack behaviors (e.g., brute force, unauthorized access)
-Generate structured security alerts
-Provide readable output for security analysis
-⚙️ Features
-📄 Log file parsing and preprocessing
-🔍 Detection of suspicious activity patterns
-🚨 Basic attack identification (brute force / abnormal access patterns)
-📊 Structured security alert generation
-🧠 Modular logic for future expansion
-📁 Works with .log file inputs
-🧠 System Architecture
-Log Files
-   ↓
-Log Parser
-   ↓
-Analysis Engine
-   ↓
-Attack Detection Module
-   ↓
+Move the following classes from the monitoring project:
+
+com.monitoring.forwarder.client
+
+Into dashboard project:
+
+com.example.dashboard.integration
+
+Included files:
+
+LogForwarderClient.java
+MaliciousActivityDetector.java
+2️⃣ Add UI Components
+Place MaliciousReportController.java into:
+com.example.dashboard.ui
+Add malicious_report.fxml into:
+resources/fxml/
+3️⃣ Connect to Main Application
+
+In MainController or MainApp:
+
+Create an instance of LogForwarderClient
+Configure it to poll:
+http://localhost:<port>/entries
+On receiving new logs:
+Run MaliciousActivityDetector.analyze()
+Forward alerts to:
+MaliciousReportController.showAlerts()
+4️⃣ Configuration
+
+You can adjust:
+
+Polling interval
+Detection thresholds
+Risk scoring rules
+
+via application properties file.
+
+🧠 System Design Insight
+
+This patch introduces a lightweight SIEM-like extension into the dashboard system.
+
+It follows this flow:
+
+Log Forwarder Client
+        ↓
+Log Stream (HTTP /entries)
+        ↓
+Malicious Activity Detector
+        ↓
 Alert Generator
-   ↓
-Output Logs / Reports
-🛠️ Technologies Used
-Java / JavaScript (keep your actual tech here)
-File Handling
-Pattern Matching
-Log Processing Logic
-Basic Security Analysis Concepts
-📂 Project Structure
-Network-Attack-Log-Analyzer-System/
-│
-├── src/                # Source code
-├── logs/               # Input log files
-├── output/             # Generated analysis results
-├── docs/               # Documentation (optional but recommended)
-└── README.md
-🚀 How to Run
-📥 Step 1: Clone or Download
+        ↓
+JavaFX UI Controller
+        ↓
+Dashboard View (FXML)
+🧱 Data Structures Used (DS Lab Focus)
 
-Download the repository as ZIP or clone it:
+This module is designed specifically for Data Structures & Algorithms lab evaluation.
 
-git clone https://github.com/IzmaAmin/Network-Attack-Log-Analyzer-System.git
-📂 Step 2: Extract & Open
-Extract ZIP file (if downloaded)
-Open in:
-Visual Studio Code
-Eclipse
-IntelliJ (if Java-based)
-▶️ Step 3: Run Project
-Run the main entry file inside src/
-The system will analyze log files automatically
-📊 Step 4: View Output
-Check /output folder or console logs
-Security alerts will be generated based on detected patterns
+📊 Used Structures:
+HashMap
+riskByIp
+riskByUser
+→ Tracks risk scoring per entity
+Queue / Deque
+→ Maintains time-windowed activity logs
+ArrayList
+→ Stores and returns alert objects for UI rendering
+🚨 Detection Rules Implemented
+
+The system uses rule-based detection logic:
+
+🔐 BRUTE_FORCE
+Multiple failed login attempts in short time window
+🚫 UNAUTHORIZED ACCESS
+Repeated 403 errors or unauthorized patterns
+🌊 FLOODING ATTACK
+High request rate from single IP
+⚠️ ABNORMAL BEHAVIOR
+Heuristic anomaly detection based on activity scoring
+📊 Alert Structure
+
+Each alert contains:
+
+IP Address / User
+Alert Type
+Severity (LOW / MEDIUM / HIGH)
+Description
+Risk Score
+▶️ How to Run
+Step 1
+
+Launch JavaFX Application:
+
+MainApp.java
+Step 2
+
+Load logs:
+
+Click Load Logs
+Or select log directory
+Step 3
+
+Analyze:
+
+Click Analyze Activity
+Step 4
+
+View Results:
+
+Alerts appear in right panel
+Click View Alerts for details
+💻 Demo Mode
+
+A demo batch file is included:
+
+run_demo.bat
+
+It performs:
+
+Compilation of core modules
+Execution of analyzer tests
+Console-based simulation
+UI behavior demonstration
+🧪 Demo Commands
+javac -d out/classes src/main/java/...
+java -cp out/classes com.example.dashboard.tools.TestRunner
+java -cp out/classes com.example.dashboard.tools.AnalyzerMain resources/logs
+java -cp out/classes com.example.dashboard.tools.UiSimulator resources/logs
 📌 Sample Output
-[ALERT] Suspicious Login Attempts Detected
-[WARNING] Possible Brute Force Attack from IP: 192.168.x.x
-[INFO] Log analysis completed successfully
-🔐 Use Case
+[ALERT] HIGH - ABNORMAL_BEHAVIOR (bot ip=198.51.100.1 score=100)
+[ALERT] HIGH - FLOODING (bot ip=198.51.100.1 score=100)
+[ALERT] MEDIUM - BRUTE_FORCE (user=alice ip=192.168.1.10 score=40)
+[ALERT] LOW - UNAUTHORIZED (user=bob ip=10.0.0.5 score=20)
 
-This system can be used for:
+Report Summary:
+Logs Processed: 75
+Alerts Generated: 48
+High: 39 | Medium: 5 | Low: 4
+Blacklisted IPs: 1
+🧪 Testing
 
-Cybersecurity learning
-Log analysis practice
-SOC (Security Operations Center) simulation
-Academic projects in network security
-📈 Future Improvements
-Machine Learning-based anomaly detection
-Real-time log monitoring
-Web dashboard (React/Node.js)
-Database integration (MongoDB / MySQL)
-Export reports in PDF format
-IP reputation tracking
-👨‍💻 Author
+Unit tests included:
 
-Izma Amin
+LogAnalyzerTest
+BRUTE_FORCE detection validation
+UNAUTHORIZED detection validation
+⚠️ Limitations
 
-⭐ Note
+This system is:
 
-This repository contains the complete project source code and is intended to be downloaded and executed locally due to its multi-file structure.
-
-🎯 2. Fix your GitHub structure (VERY IMPORTANT)
-
-Make your repo like this:
-
-src/
-logs/
-output/
-docs/
-README.md
-❌ Remove clutter like:
-random batch files (if not needed)
-duplicate folders
-nested project folders
-🧠 3. Add “PORTFOLIO BOOST” (this is what makes it 10/10)
-🔥 Add a docs folder:
-
-Inside docs/ add:
-
-📄 architecture.txt or diagram image
-
-Even a simple image like:
-
-Log Flow → Parser → Analyzer → Alert Engine
-🔥 Add a sample log file (IMPORTANT)
-
-Example:
-
-logs/sample.log
-
-Include fake realistic logs like:
-
-User admin failed login attempt
-User admin failed login attempt
-User admin failed login attempt
+❗ Rule-based (not AI/ML-based)
+❗ Designed for academic/lab demonstration
+❗ Not intended for production security environments
