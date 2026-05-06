@@ -1,0 +1,27 @@
+*** Add these lines (manually paste into the indicated methods) ***
+
+--- LoginView.java (insert after authentication result)
++    // LOGGING: record login attempt for dashboard
++    try {
++        LOG_WRITER.log(ok ? "INFO" : "WARN", username, clientIp, "LOGIN", ok ? "OK" : "FAIL", ok ? "" : "reason:bad_password");
++    } catch (Exception ignored) {}
+
+--- TransactionView.java or LibraryService.java (insert after checkout/return)
++    try {
++        LOG_WRITER.log("INFO", username, clientIp, "CHECKOUT", success ? "OK" : "FAIL", "bookId:" + bookId);
++    } catch (Exception ignored) {}
+
+--- Anywhere that denies access (403)
++    try {
++        LOG_WRITER.log("WARN", username, clientIp, "ACCESS", "403", "reason:unauthorized");
++    } catch (Exception ignored) {}
+
+*** Add this logger field at top of modified classes if not present ***
++private static final Library.util.LogWriter LOG_WRITER = new Library.util.LogWriter(
++    Library.util.LogWriter.resolveLogFile(() -> System.getenv("LIBRARY_LOG_DIR"), "resources/logs")
++);
+
+*** Instructions: ***
+- Open the referenced files in the Library project and paste the small snippets at the indicated locations.
+- If exact filenames differ, search for methods named `login`, `checkout`, `borrow`, `return`, or places dealing with auth failures and paste accordingly.
+- Run tests and perform manual verification as described in APPLY_PATCH.md.

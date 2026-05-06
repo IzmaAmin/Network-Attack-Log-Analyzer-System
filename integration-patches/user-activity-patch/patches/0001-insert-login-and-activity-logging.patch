@@ -1,0 +1,27 @@
+*** Add these lines (manually paste into the indicated methods) ***
+
+--- LoginController.java (insert after authentication result)
++    // LOGGING: record login attempt for dashboard
++    try {
++        LOG_WRITER.log(ok ? "INFO" : "WARN", username, clientIp, "LOGIN", ok ? "OK" : "FAIL", ok ? "" : "reason:bad_password");
++    } catch (Exception ignored) {}
+
+--- CommentController.java (after successful post)
++    try {
++        LOG_WRITER.log("INFO", username, clientIp, "POST_COMMENT", "OK", "length:" + (content==null?0:content.length()));
++    } catch (Exception ignored) {}
+
+--- DownloadController.java (after successful download)
++    try {
++        LOG_WRITER.log("INFO", username, clientIp, "DOWNLOAD", "OK", "file:" + fileName);
++    } catch (Exception ignored) {}
+
+*** Also add the logger field near class fields if not present in each modified class: ***
++private static final com.monitoring.util.LogWriter LOG_WRITER = new com.monitoring.util.LogWriter(
++    com.monitoring.util.LogWriter.resolveLogFile(() -> System.getenv("USER_ACTIVITY_LOG_DIR"), "resources/logs")
++);
+
+*** Instructions: ***
+- Open the referenced files in the User Activity project and paste the small snippets at the indicated locations.
+- If exact filenames differ, search for methods named `login`, `postComment`, `download`, or places dealing with auth failures and paste accordingly.
+- Run tests and perform manual verification as described in APPLY_PATCH.md.
